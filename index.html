@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aniq AR · Viewer</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #0b1020;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --accent: #6366f1;
+      --accent-2: #ec4899;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; font-family: Inter, Arial, sans-serif; }
+    body {
+      background: radial-gradient(1200px 600px at 20% -10%, #312e81 0%, #0b1020 50%),
+                  radial-gradient(900px 500px at 120% 110%, #831843 0%, transparent 60%),
+                  var(--bg);
+      color: #e5e7eb;
+      min-height: 100vh;
+    }
+    .wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 18px 16px 32px;
+    }
+    .bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      color: #fff;
+      text-decoration: none;
+    }
+    .brand .dot {
+      width: 10px; height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 24px rgba(99,102,241,0.7);
+    }
+    .back {
+      color: #c7d2fe;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+    .head {
+      padding: 18px 18px 10px;
+    }
+    h1 {
+      font-size: 22px;
+      margin: 0 0 6px;
+      color: #fff;
+    }
+    p { margin: 0; color: #cbd5e1; line-height: 1.55; font-size: 14px; }
+    model-viewer {
+      width: 100%;
+      height: 72vh;
+      min-height: 520px;
+      background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%);
+      --poster-color: transparent;
+    }
+    .note {
+      padding: 12px 18px 18px;
+      font-size: 13px;
+      color: #94a3b8;
+    }
+    .ar-button {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      border: none;
+      border-radius: 999px;
+      padding: 14px 22px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(99,102,241,0.45);
+    }
+    .empty {
+      padding: 60px 24px;
+      text-align: center;
+      color: #cbd5e1;
+    }
+    .empty a {
+      display: inline-block;
+      margin-top: 14px;
+      color: #a5b4fc;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .loading {
+      padding: 40px;
+      text-align: center;
+      color: #c7d2fe;
+    }
+    .spinner {
+      width: 28px; height: 28px;
+      border: 3px solid rgba(255,255,255,0.15);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="bar">
+      <a class="brand" href="/"><span class="dot"></span> Aniq AR</a>
+      <a class="back" href="/">← Bosh sahifa</a>
+    </div>
+    <div class="card" id="card">
+      <div class="loading" id="loading"><span class="spinner"></span> Model yuklanmoqda...</div>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+    const autoAR = params.get("autoar") === "1";
+    const card = document.getElementById("card");
+
+    async function load() {
+      if (!id) {
+        card.innerHTML = `
+          <div class="empty">
+            <div>Model topilmadi yoki havola noto‘g‘ri.</div>
+            <a href="/">← Bosh sahifaga qaytish</a>
+          </div>`;
+        return;
+      }
+      try {
+        const res = await fetch(`/api/products/${id}`);
+        if (!res.ok) throw new Error("not found");
+        const data = await res.json();
+        document.title = `${data.name} · Aniq AR`;
+
+        card.innerHTML = `
+          <div class="head">
+            <h1>${escapeHtml(data.name)}</h1>
+            <p>Modelni aylantirib ko‘rish mumkin. AR tugmasini bosib, haqiqiy dunyoda joylashtiring.</p>
+          </div>
+        `;
+
+        const mv = document.createElement("model-viewer");
+        mv.setAttribute("src", data.model_url);
+        mv.setAttribute("alt", data.name);
+        mv.setAttribute("ar", "");
+        mv.setAttribute("ar-modes", "webxr scene-viewer quick-look");
+        mv.setAttribute("ar-scale", "fixed");
+        mv.setAttribute("ar-placement", "floor");
+        mv.setAttribute("scale", "0.2 0.2 0.2");
+        mv.setAttribute("camera-controls", "");
+        mv.setAttribute("auto-rotate", "");
+        mv.setAttribute("shadow-intensity", "1");
+        mv.setAttribute("environment-image", "neutral");
+        mv.setAttribute("exposure", "1.05");
+        mv.setAttribute("interaction-prompt", "none");
+
+        const btn = document.createElement("button");
+        btn.setAttribute("slot", "ar-button");
+        btn.className = "ar-button";
+        btn.textContent = "📱 AR'da ko‘rish";
+        mv.appendChild(btn);
+
+        const note = document.createElement("div");
+        note.className = "note";
+        note.textContent = "Android'da Chrome/Scene Viewer, iPhone'da Safari Quick Look orqali AR ochiladi.";
+
+        card.appendChild(mv);
+        card.appendChild(note);
+
+        if (autoAR) {
+          mv.addEventListener("load", () => {
+            setTimeout(() => {
+              try { mv.activateAR(); } catch (e) {}
+            }, 250);
+          }, { once: true });
+        }
+      } catch (e) {
+        card.innerHTML = `
+          <div class="empty">
+            <div>Model topilmadi yoki havola noto‘g‘ri.</div>
+            <a href="/">← Bosh sahifaga qaytish</a>
+          </div>`;
+      }
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, c => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+      }[c]));
+    }
+
+    load();
+  </script>
+</body>
+</html>

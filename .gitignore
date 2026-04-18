@@ -1,0 +1,19 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+
+# Environment variables
+.env
+
+# IDE/editor files
+.vscode/
+*.swp
+*.swo
+*.bak
+
+# Generated files
+models/
+qrcodes/

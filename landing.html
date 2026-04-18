@@ -1,0 +1,808 @@
+<!doctype html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aniq AR — Skanlang. Ko‘ring. Joylashtiring.</title>
+    <meta
+      name="description"
+      content="QR kodni skanlang — mahsulot AR orqali haqiqiy dunyoda joylashadi. Restoran, do‘kon va muzeylar uchun yangi tajriba."
+    />
+    <script
+      type="module"
+      src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
+    ></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg: #0b1020;
+        --surface: #0f172a;
+        --card: rgba(255, 255, 255, 0.05);
+        --border: rgba(255, 255, 255, 0.08);
+        --text: #e5e7eb;
+        --muted: #94a3b8;
+        --accent: #818cf8;
+        --accent-2: #ec4899;
+        --gradient: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        font-family:
+          Inter,
+          -apple-system,
+          BlinkMacSystemFont,
+          Arial,
+          sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(
+            1200px 700px at 10% -10%,
+            rgba(99, 102, 241, 0.35),
+            transparent 60%
+          ),
+          radial-gradient(
+            1000px 600px at 100% 10%,
+            rgba(236, 72, 153, 0.25),
+            transparent 60%
+          ),
+          radial-gradient(
+            900px 500px at 50% 110%,
+            rgba(56, 189, 248, 0.18),
+            transparent 60%
+          ),
+          var(--bg);
+        overflow-x: hidden;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .wrap {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* NAV */
+      nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        backdrop-filter: blur(18px);
+        background: rgba(11, 16, 32, 0.65);
+        border-bottom: 1px solid var(--border);
+      }
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 0;
+      }
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 800;
+        font-size: 18px;
+        letter-spacing: 0.3px;
+      }
+      .brand .logo {
+        width: 30px;
+        height: 30px;
+        border-radius: 9px;
+        background: var(--gradient);
+        box-shadow: 0 10px 24px rgba(99, 102, 241, 0.45);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        color: #fff;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        font-size: 14px;
+        color: #cbd5e1;
+      }
+      .nav-links a:hover {
+        color: #fff;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 16px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 14px;
+        cursor: pointer;
+        border: 1px solid var(--border);
+        transition: transform 0.15s ease;
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+      .btn-primary {
+        background: var(--gradient);
+        border: none;
+        color: #fff;
+        box-shadow: 0 14px 30px rgba(99, 102, 241, 0.4);
+      }
+      .btn-ghost {
+        background: rgba(255, 255, 255, 0.03);
+        color: #e5e7eb;
+      }
+
+      /* HERO */
+      .hero {
+        padding: 72px 0 48px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        align-items: center;
+      }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: rgba(129, 140, 248, 0.12);
+        border: 1px solid rgba(129, 140, 248, 0.25);
+        font-size: 12.5px;
+        color: #c7d2fe;
+        margin-bottom: 18px;
+      }
+      .eyebrow .pulse {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #a5f3fc;
+        box-shadow: 0 0 12px #22d3ee;
+        animation: pulse 1.6s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        50% {
+          opacity: 0.35;
+        }
+      }
+      h1.title {
+        font-size: clamp(36px, 5vw, 60px);
+        line-height: 1.05;
+        margin: 0 0 18px;
+        font-weight: 900;
+        letter-spacing: -1px;
+      }
+      h1.title .grad {
+        background: linear-gradient(
+          135deg,
+          #a5b4fc 0%,
+          #f0abfc 50%,
+          #fda4af 100%
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .lead {
+        font-size: 18px;
+        color: #cbd5e1;
+        line-height: 1.6;
+        margin: 0 0 26px;
+        max-width: 560px;
+      }
+      .hero-cta {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 26px;
+      }
+      .stats {
+        display: flex;
+        gap: 26px;
+        flex-wrap: wrap;
+      }
+      .stat .num {
+        font-size: 24px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #a5b4fc, #f0abfc);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .stat .lbl {
+        font-size: 12px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      /* HERO MODEL */
+      .hero-model {
+        position: relative;
+        border-radius: 24px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        background: linear-gradient(
+          180deg,
+          rgba(99, 102, 241, 0.08),
+          rgba(236, 72, 153, 0.05)
+        );
+        aspect-ratio: 1 / 1;
+        box-shadow: 0 40px 80px rgba(15, 23, 42, 0.6);
+      }
+      .hero-model model-viewer {
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        --poster-color: transparent;
+      }
+      .hero-badge {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid var(--border);
+        padding: 8px 14px;
+        border-radius: 999px;
+        font-size: 12px;
+        color: #e5e7eb;
+        backdrop-filter: blur(10px);
+      }
+      .hero-badge .d {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #34d399;
+        box-shadow: 0 0 12px #10b981;
+      }
+
+      /* SECTION */
+      section {
+        padding: 72px 0;
+      }
+      .section-head {
+        text-align: center;
+        max-width: 720px;
+        margin: 0 auto 48px;
+      }
+      .kicker {
+        font-size: 13px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #a5b4fc;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+      h2 {
+        font-size: clamp(28px, 3.5vw, 42px);
+        margin: 0 0 14px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+      }
+      .section-head p {
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.6;
+        margin: 0;
+      }
+
+      /* STEPS */
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      .step {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 28px 24px;
+        position: relative;
+        overflow: hidden;
+      }
+      .step::before {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        border-radius: 20px;
+        padding: 1px;
+        background: linear-gradient(
+          135deg,
+          rgba(129, 140, 248, 0.25),
+          rgba(236, 72, 153, 0.2)
+        );
+        -webkit-mask:
+          linear-gradient(#000 0 0) content-box,
+          linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+      }
+      .step .n {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: var(--gradient);
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        margin-bottom: 14px;
+      }
+      .step h3 {
+        margin: 0 0 6px;
+        font-size: 18px;
+      }
+      .step p {
+        margin: 0;
+        color: #cbd5e1;
+        line-height: 1.6;
+        font-size: 14.5px;
+      }
+
+      /* FEATURES */
+      .features {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      .feat {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 26px 22px;
+      }
+      .feat .ico {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: rgba(129, 140, 248, 0.15);
+        border: 1px solid rgba(129, 140, 248, 0.3);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        margin-bottom: 12px;
+      }
+      .feat h4 {
+        margin: 0 0 6px;
+        font-size: 16px;
+      }
+      .feat p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.55;
+        font-size: 14px;
+      }
+
+      /* DEMO */
+      .demo {
+        background: linear-gradient(
+          135deg,
+          rgba(99, 102, 241, 0.12),
+          rgba(236, 72, 153, 0.08)
+        );
+        border: 1px solid var(--border);
+        border-radius: 26px;
+        padding: 44px;
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 40px;
+        align-items: center;
+      }
+      .demo h2 {
+        margin-top: 0;
+      }
+      .demo .bullets {
+        list-style: none;
+        padding: 0;
+        margin: 18px 0 26px;
+      }
+      .demo .bullets li {
+        padding: 8px 0;
+        color: #cbd5e1;
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+      }
+      .demo .bullets li::before {
+        content: "✓";
+        color: #34d399;
+        font-weight: 800;
+      }
+      .qr-card {
+        background: #fff;
+        border-radius: 20px;
+        padding: 22px;
+        text-align: center;
+        color: #0f172a;
+        box-shadow: 0 30px 60px rgba(15, 23, 42, 0.5);
+      }
+      .qr-card img {
+        width: 100%;
+        max-width: 260px;
+        aspect-ratio: 1/1;
+        display: block;
+        margin: 0 auto 12px;
+      }
+      .qr-card .lbl {
+        font-size: 13px;
+        color: #475569;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 700;
+      }
+      .qr-card .nm {
+        font-size: 20px;
+        font-weight: 800;
+        margin: 6px 0 2px;
+      }
+      .qr-card .url {
+        font-size: 12px;
+        color: #64748b;
+        word-break: break-all;
+      }
+
+      /* USE CASES */
+      .cases {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+      }
+      .case {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 22px 18px;
+        text-align: center;
+      }
+      .case .em {
+        font-size: 34px;
+        display: block;
+        margin-bottom: 6px;
+      }
+      .case h5 {
+        margin: 0 0 4px;
+        font-size: 15px;
+      }
+      .case p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      /* CTA */
+      .cta {
+        text-align: center;
+        padding: 56px 24px;
+        border-radius: 26px;
+        background:
+          radial-gradient(
+            800px 300px at 50% 0%,
+            rgba(99, 102, 241, 0.35),
+            transparent 60%
+          ),
+          rgba(15, 23, 42, 0.5);
+        border: 1px solid var(--border);
+      }
+      .cta h2 {
+        margin: 0 0 10px;
+      }
+      .cta p {
+        margin: 0 auto 24px;
+        color: #cbd5e1;
+        max-width: 560px;
+        line-height: 1.6;
+      }
+
+      footer {
+        padding: 30px 0 40px;
+        color: var(--muted);
+        font-size: 13px;
+        border-top: 1px solid var(--border);
+        margin-top: 40px;
+        text-align: center;
+      }
+
+      @media (max-width: 860px) {
+        .hero {
+          grid-template-columns: 1fr;
+          padding: 48px 0 32px;
+        }
+        .steps,
+        .features {
+          grid-template-columns: 1fr;
+        }
+        .cases {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .demo {
+          grid-template-columns: 1fr;
+          padding: 28px;
+        }
+        .nav-links .hide-sm {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="wrap nav">
+        <a class="brand" href="#top"> <span class="logo">A</span> Aniq AR </a>
+        <div class="nav-links">
+          <a class="hide-sm" href="#how">Qanday ishlaydi</a>
+          <a class="hide-sm" href="#features">Imkoniyatlar</a>
+          <a class="hide-sm" href="#demo">Demo</a>
+          <a class="btn btn-ghost" href="/admin">Admin</a>
+        </div>
+      </div>
+    </nav>
+
+    <header class="wrap" id="top">
+      <div class="hero">
+        <div>
+          <div class="eyebrow">
+            <span class="pulse"></span> Startup Pitch Demo · 2026
+          </div>
+          <h1 class="title">
+            Skanlang. Ko‘ring. <span class="grad">Joylashtiring.</span>
+          </h1>
+          <p class="lead">
+            QR kodni kameraga tuting — mahsulot darhol haqiqiy dunyoda paydo
+            bo‘ladi. Yuklab olish, ilova o‘rnatish yoki kutish shart emas. Aniq
+            AR — restoran, do‘kon va muzeylarni mijoz bilan yangi darajada
+            bog‘laydi.
+          </p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="#demo">🎯 Demoni ko‘rish</a>
+            <a class="btn btn-ghost" href="/admin">Admin panel</a>
+          </div>
+          <div class="stats">
+            <div class="stat">
+              <div class="num" id="stat-count">—</div>
+              <div class="lbl">Faol modellar</div>
+            </div>
+            <div class="stat">
+              <div class="num">&lt; 2s</div>
+              <div class="lbl">AR ochilish vaqti</div>
+            </div>
+            <div class="stat">
+              <div class="num">0</div>
+              <div class="lbl">Ilova o‘rnatish</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-model">
+          <div class="hero-badge">
+            <span class="d"></span> Live 3D · Aylantirib ko‘ring
+          </div>
+          <model-viewer
+            id="hero-mv"
+            alt="Aniq AR demo"
+            camera-controls
+            auto-rotate
+            rotation-per-second="20deg"
+            shadow-intensity="1.1"
+            environment-image="neutral"
+            exposure="1.1"
+            interaction-prompt="none"
+          >
+          </model-viewer>
+        </div>
+      </div>
+    </header>
+
+    <section id="how" class="wrap">
+      <div class="section-head">
+        <div class="kicker">Qanday ishlaydi</div>
+        <h2>Uch qadamda AR tajribasi</h2>
+        <p>
+          Mijoz smartfonini chiqaradi, QR'ni skanlaydi — kerakli mahsulot uning
+          xonasida paydo bo‘ladi. Sizdan faqat modelni yuklash talab qilinadi.
+        </p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="n">1</div>
+          <h3>Modelni yuklang</h3>
+          <p>
+            Admin panelda .glb yoki .gltf faylni tanlang, nomini kiriting va
+            saqlang. Tizim QR kodni avtomatik yaratadi.
+          </p>
+        </div>
+        <div class="step">
+          <div class="n">2</div>
+          <h3>QR'ni joylashtiring</h3>
+          <p>
+            QR'ni menyu, etiketka yoki ko‘rgazma panelida ko‘rsating. Mijoz
+            kamerasi bilan bir lahzada skanlaydi.
+          </p>
+        </div>
+        <div class="step">
+          <div class="n">3</div>
+          <h3>AR darhol ochiladi</h3>
+          <p>
+            Android'da Scene Viewer, iOS'da Quick Look yordamida model haqiqiy
+            o‘lchamda xonada paydo bo‘ladi — hech qanday kutish sahifasi yo‘q.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="wrap">
+      <div class="section-head">
+        <div class="kicker">Imkoniyatlar</div>
+        <h2>Hamma narsa bir platformada</h2>
+        <p>
+          Kichik restorandan to yirik ko‘rgazmalargacha — bitta tizim bilan AR
+          tajribangizni boshqaring.
+        </p>
+      </div>
+      <div class="features">
+        <div class="feat">
+          <div class="ico">⚡</div>
+          <h4>Zero-install AR</h4>
+          <p>Mijoz ilova yuklab olmaydi. QR → kamera → AR. Darhol.</p>
+        </div>
+        <div class="feat">
+          <div class="ico">🎨</div>
+          <h4>3D model boshqaruvi</h4>
+          <p>Qo‘shish, tahrirlash va o‘chirish uchun qulay admin panel.</p>
+        </div>
+        <div class="feat">
+          <div class="ico">📲</div>
+          <h4>iOS va Android</h4>
+          <p>Quick Look va Scene Viewer orqali native AR ishga tushadi.</p>
+        </div>
+        <div class="feat">
+          <div class="ico">🔗</div>
+          <h4>QR avtomatik</h4>
+          <p>Har bir modelga yuklash payti QR yaratiladi va saqlanadi.</p>
+        </div>
+        <div class="feat">
+          <div class="ico">🖼️</div>
+          <h4>Bosma uchun tayyor</h4>
+          <p>
+            QR PNG formatda yuklab olinadi — etiketka va menyuga yopishtiring.
+          </p>
+        </div>
+        <div class="feat">
+          <div class="ico">🔒</div>
+          <h4>O‘zingizniki</h4>
+          <p>
+            Serveringizda ishlaydi. Fayllar va havolalar to‘liq sizning
+            nazoratingizda.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="section-head">
+        <div class="kicker">Foydalanish sohalari</div>
+        <h2>Qayerda ishlatish mumkin?</h2>
+      </div>
+      <div class="cases">
+        <div class="case">
+          <span class="em">🍕</span>
+          <h5>Restoran</h5>
+          <p>Menyudagi taomlarni 3D'da ko‘rish.</p>
+        </div>
+        <div class="case">
+          <span class="em">🛋️</span>
+          <h5>Mebel do‘koni</h5>
+          <p>Mijoz jihozni xonasiga "qo‘yib" sinab ko‘radi.</p>
+        </div>
+        <div class="case">
+          <span class="em">🏛️</span>
+          <h5>Muzey</h5>
+          <p>Eksponatlar interaktiv, ta’limiy va qiziqarli.</p>
+        </div>
+        <div class="case">
+          <span class="em">🛍️</span>
+          <h5>Marketplace</h5>
+          <p>Mahsulotni sotib olishdan oldin ko‘ring.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="demo" class="wrap">
+      <div class="demo">
+        <div>
+          <div class="kicker">Live demo</div>
+          <h2>QR'ni skanlang va sinab ko‘ring</h2>
+          <p style="color: #cbd5e1; line-height: 1.6">
+            Telefon kamerasini o‘ng tomondagi QR ga tuting. Model darhol AR
+            rejimida xonangizda paydo bo‘ladi — kutish, ilova yoki tasdiqlash
+            yo‘q.
+          </p>
+          <ul class="bullets">
+            <li>Native AR — brauzer ichida emas, tizimning o‘z AR rejimida</li>
+            <li>HTTPS orqali xavfsiz</li>
+            <li>Model fayllari siz yuklagan tarzda</li>
+          </ul>
+          <a class="btn btn-primary" href="#" id="demo-open"
+            >🚀 Brauzerda ochish</a
+          >
+        </div>
+        <div class="qr-card" id="qr-card">
+          <img id="qr-img" src="" alt="QR demo" />
+          <div class="lbl">Aniq AR Demo</div>
+          <div class="nm" id="qr-name">Model yuklanmoqda…</div>
+          <div class="url" id="qr-url"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="cta">
+        <h2>Startup demo uchun tayyor</h2>
+        <p>
+          Qo‘shimcha sozlash talab qilmaydi. Admin panelga kiring, modellarni
+          yuklang va QR'ni taqdimotda ishlating.
+        </p>
+        <a
+          class="btn btn-primary"
+          href="/admin"
+          style="padding: 14px 22px; font-size: 15px"
+          >Admin panelni ochish →</a
+        >
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap">© 2026 Aniq AR · Skanlang. Ko‘ring. Joylashtiring.</div>
+    </footer>
+
+    <script>
+      async function init() {
+        try {
+          const res = await fetch("/api/products");
+          const items = await res.json();
+          document.getElementById("stat-count").textContent = items.length;
+
+          if (!items.length) {
+            document.getElementById("qr-name").textContent =
+              "Model hali yuklanmagan";
+            document.getElementById("qr-url").innerHTML =
+              '<a style="color:#6366f1" href="/admin">Admin panelga o‘tish →</a>';
+            return;
+          }
+
+          const demo = items[0];
+          const mv = document.getElementById("hero-mv");
+          mv.setAttribute("src", demo.model_url);
+          mv.setAttribute("scale", "0.2 0.2 0.2");
+
+          document.getElementById("qr-img").src = demo.qr_url;
+          document.getElementById("qr-name").textContent = demo.name;
+          document.getElementById("qr-url").textContent = demo.ar_url;
+          document.getElementById("demo-open").href = demo.ar_url;
+        } catch (e) {
+          document.getElementById("qr-name").textContent =
+            "Server bilan bog‘lanishda xato";
+        }
+      }
+      init();
+    </script>
+  </body>
+</html>

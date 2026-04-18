@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin · AR Models</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --accent: #2563eb;
+      --danger: #dc2626;
+      --ok: #16a34a;
+      --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(180deg, #eef4ff 0%, var(--bg) 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    h1 { margin: 0; font-size: 24px; }
+    .muted { color: var(--muted); font-size: 14px; }
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .card h2 { margin: 0 0 14px; font-size: 18px; }
+    form .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    input[type="text"], input[type="file"] {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      flex: 1 1 200px;
+      min-width: 160px;
+      background: #fff;
+    }
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-ghost { background: transparent; color: var(--accent); border: 1px solid var(--border); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .item {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+    .item .qr {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .item .qr img {
+      max-width: 80%;
+      max-height: 80%;
+    }
+    .item .body { padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+    .item .name { font-weight: 700; font-size: 16px; }
+    .item .url {
+      font-size: 12px;
+      color: var(--muted);
+      word-break: break-all;
+    }
+    .item .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+    .item .actions button, .item .actions a {
+      flex: 1 1 auto;
+      text-align: center;
+      text-decoration: none;
+      padding: 8px 10px;
+      font-size: 13px;
+    }
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0f172a;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 14px;
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+      z-index: 100;
+    }
+    .toast.show { opacity: 1; }
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      padding: 16px;
+    }
+    .modal.show { display: flex; }
+    .modal .box {
+      background: #fff;
+      border-radius: 16px;
+      padding: 22px;
+      width: 100%;
+      max-width: 480px;
+    }
+    .modal h3 { margin: 0 0 14px; }
+    .modal .row { margin-bottom: 10px; }
+    .modal label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+    .modal .actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
+    .empty {
+      text-align: center;
+      padding: 32px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>AR Model Admin</h1>
+        <div class="muted">Modellarni qo‘shish, tahrirlash va o‘chirish</div>
+      </div>
+      <a class="btn-ghost" style="padding:10px 16px;border-radius:10px;border:1px solid var(--border);text-decoration:none;color:var(--accent);" href="/">Bosh sahifa →</a>
+    </header>
+
+    <div class="card">
+      <h2>Yangi model qo‘shish</h2>
+      <form id="create-form">
+        <div class="row">
+          <input type="text" name="name" id="create-name" placeholder="Mahsulot nomi (masalan: Pitsa)" required />
+          <input type="file" name="model" id="create-file" accept=".glb,.gltf,model/gltf-binary,model/gltf+json" required />
+          <button type="submit" class="btn-primary">Yuklash</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Modellar</h2>
+      <div id="list" class="grid"></div>
+      <div id="empty" class="empty" style="display:none;">Hozircha modellar yo‘q. Yuqoridan qo‘shing.</div>
+    </div>
+  </div>
+
+  <div class="modal" id="edit-modal">
+    <div class="box">
+      <h3>Modelni tahrirlash</h3>
+      <form id="edit-form">
+        <input type="hidden" id="edit-id" />
+        <div class="row">
+          <label for="edit-name">Nomi</label>
+          <input type="text" id="edit-name" required />
+        </div>
+        <div class="row">
+          <label for="edit-file">Yangi fayl (ixtiyoriy)</label>
+          <input type="file" id="edit-file" accept=".glb,.gltf,model/gltf-binary,model/gltf+json" />
+        </div>
+        <div class="actions">
+          <button type="button" class="btn-ghost" id="edit-cancel">Bekor qilish</button>
+          <button type="submit" class="btn-primary">Saqlash</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const listEl = document.getElementById("list");
+    const emptyEl = document.getElementById("empty");
+    const toastEl = document.getElementById("toast");
+    const editModal = document.getElementById("edit-modal");
+
+    function toast(msg) {
+      toastEl.textContent = msg;
+      toastEl.classList.add("show");
+      setTimeout(() => toastEl.classList.remove("show"), 2000);
+    }
+
+    async function loadList() {
+      listEl.innerHTML = "";
+      const res = await fetch("/api/products");
+      const items = await res.json();
+      if (!items.length) {
+        emptyEl.style.display = "block";
+        return;
+      }
+      emptyEl.style.display = "none";
+      for (const item of items) {
+        const el = document.createElement("div");
+        el.className = "item";
+        el.innerHTML = `
+          <div class="qr"><img src="${item.qr_url}" alt="QR" /></div>
+          <div class="body">
+            <div class="name"></div>
+            <div class="url"></div>
+            <div class="actions">
+              <a href="${item.view_url}" target="_blank" class="btn-ghost">Ko‘rish</a>
+              <a href="${item.qr_url}" download class="btn-ghost">QR yuklab olish</a>
+              <button class="btn-ghost" data-action="copy">Havolani ko‘chirish</button>
+              <button class="btn-primary" data-action="edit">Tahrirlash</button>
+              <button class="btn-danger" data-action="delete">O‘chirish</button>
+            </div>
+          </div>
+        `;
+        el.querySelector(".name").textContent = item.name;
+        el.querySelector(".url").textContent = item.ar_url;
+        el.querySelector('[data-action="copy"]').addEventListener("click", () => {
+          navigator.clipboard.writeText(item.ar_url);
+          toast("Havola ko‘chirildi");
+        });
+        el.querySelector('[data-action="edit"]').addEventListener("click", () => openEdit(item));
+        el.querySelector('[data-action="delete"]').addEventListener("click", () => removeItem(item));
+        listEl.appendChild(el);
+      }
+    }
+
+    document.getElementById("create-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("create-name").value.trim();
+      const file = document.getElementById("create-file").files[0];
+      if (!name || !file) return;
+      const fd = new FormData();
+      fd.append("name", name);
+      fd.append("model", file);
+      const res = await fetch("/api/products", { method: "POST", body: fd });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        toast(err.detail || "Xatolik");
+        return;
+      }
+      e.target.reset();
+      toast("Qo‘shildi");
+      loadList();
+    });
+
+    function openEdit(item) {
+      document.getElementById("edit-id").value = item.id;
+      document.getElementById("edit-name").value = item.name;
+      document.getElementById("edit-file").value = "";
+      editModal.classList.add("show");
+    }
+
+    document.getElementById("edit-cancel").addEventListener("click", () => {
+      editModal.classList.remove("show");
+    });
+
+    document.getElementById("edit-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const id = document.getElementById("edit-id").value;
+      const name = document.getElementById("edit-name").value.trim();
+      const file = document.getElementById("edit-file").files[0];
+      const fd = new FormData();
+      fd.append("name", name);
+      if (file) fd.append("model", file);
+      const res = await fetch(`/api/products/${id}`, { method: "PUT", body: fd });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        toast(err.detail || "Xatolik");
+        return;
+      }
+      editModal.classList.remove("show");
+      toast("Saqlandi");
+      loadList();
+    });
+
+    async function removeItem(item) {
+      if (!confirm(`"${item.name}" o‘chirilsinmi?`)) return;
+      const res = await fetch(`/api/products/${item.id}`, { method: "DELETE" });
+      if (!res.ok) { toast("Xatolik"); return; }
+      toast("O‘chirildi");
+      loadList();
+    }
+
+    loadList();
+  </script>
+</body>
+</html>
