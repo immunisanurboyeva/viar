@@ -71,6 +71,10 @@
         max-width: 1200px;
         margin: 0 auto;
         padding: 0 20px;
+        margin-top: 5rem;
+      }
+      .wrap:nth-child(1){
+        margin-top: -5rem;
       }
 
       /* NAV */
@@ -115,8 +119,48 @@
         font-size: 14px;
         color: #cbd5e1;
       }
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
       .nav-links a:hover {
         color: #fff;
+      }
+      .lang-switch {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.04);
+      }
+      .lang-btn {
+        border: none;
+        background: transparent;
+        color: #cbd5e1;
+        font: inherit;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+        padding: 8px 10px;
+        border-radius: 999px;
+        cursor: pointer;
+        transition:
+          background 0.2s ease,
+          color 0.2s ease,
+          transform 0.15s ease;
+      }
+      .lang-btn:hover {
+        color: #fff;
+        transform: translateY(-1px);
+      }
+      .lang-btn.active {
+        background: rgba(129, 140, 248, 0.18);
+        color: #fff;
+        box-shadow: inset 0 0 0 1px rgba(129, 140, 248, 0.25);
       }
       .btn {
         display: inline-flex;
@@ -314,24 +358,18 @@
         padding: 28px 24px;
         position: relative;
         overflow: hidden;
+        background:
+          linear-gradient(var(--card), var(--card)) padding-box,
+          linear-gradient(
+              135deg,
+              rgba(129, 140, 248, 0.25),
+              rgba(236, 72, 153, 0.2)
+            )
+            border-box;
+        border: 1px solid transparent;
       }
       .step::before {
-        content: "";
-        position: absolute;
-        inset: -1px;
-        border-radius: 20px;
-        padding: 1px;
-        background: linear-gradient(
-          135deg,
-          rgba(129, 140, 248, 0.25),
-          rgba(236, 72, 153, 0.2)
-        );
-        -webkit-mask:
-          linear-gradient(#000 0 0) content-box,
-          linear-gradient(#000 0 0);
-        -webkit-mask-composite: xor;
-        mask-composite: exclude;
-        pointer-events: none;
+        content: none;
       }
       .step .n {
         width: 40px;
@@ -540,6 +578,12 @@
         .nav-links .hide-sm {
           display: none;
         }
+        .nav-actions {
+          gap: 8px;
+        }
+        .lang-switch {
+          order: -1;
+        }
       }
     </style>
   </head>
@@ -547,11 +591,20 @@
     <nav>
       <div class="wrap nav">
         <a class="brand" href="#top"> <span class="logo">A</span> Aniq AR </a>
-        <div class="nav-links">
-          <a class="hide-sm" href="#how">Qanday ishlaydi</a>
-          <a class="hide-sm" href="#features">Imkoniyatlar</a>
-          <a class="hide-sm" href="#demo">Demo</a>
-          <a class="btn btn-ghost" href="/admin">Admin</a>
+        <div class="nav-actions">
+          <div class="lang-switch" aria-label="Language switcher">
+            <button class="lang-btn active" type="button" data-lang="uz">
+              UZ
+            </button>
+            <button class="lang-btn" type="button" data-lang="ru">RU</button>
+            <button class="lang-btn" type="button" data-lang="en">ENG</button>
+          </div>
+          <div class="nav-links">
+            <a class="hide-sm" href="#how" data-i18n="nav.how">Qanday ishlaydi</a>
+            <a class="hide-sm" href="#features" data-i18n="nav.features">Imkoniyatlar</a>
+            <a class="hide-sm" href="#demo" data-i18n="nav.demo">Demo</a>
+            <a class="btn btn-ghost" href="/admin" data-i18n="nav.admin">Admin</a>
+          </div>
         </div>
       </div>
     </nav>
@@ -560,40 +613,42 @@
       <div class="hero">
         <div>
           <div class="eyebrow">
-            <span class="pulse"></span> Startup Pitch Demo · 2026
+            <span class="pulse"></span>
+            <span data-i18n="hero.eyebrow">Startup Pitch Demo · 2026</span>
           </div>
-          <h1 class="title">
+          <h1 class="title" data-i18n-html="hero.title">
             Skanlang. Ko‘ring. <span class="grad">Joylashtiring.</span>
           </h1>
-          <p class="lead">
+          <p class="lead" data-i18n="hero.lead">
             QR kodni kameraga tuting — mahsulot darhol haqiqiy dunyoda paydo
             bo‘ladi. Yuklab olish, ilova o‘rnatish yoki kutish shart emas. Aniq
             AR — restoran, do‘kon va muzeylarni mijoz bilan yangi darajada
             bog‘laydi.
           </p>
           <div class="hero-cta">
-            <a class="btn btn-primary" href="#demo">🎯 Demoni ko‘rish</a>
-            <a class="btn btn-ghost" href="/admin">Admin panel</a>
+            <a class="btn btn-primary" href="#demo" data-i18n="hero.ctaDemo">🎯 Demoni ko‘rish</a>
+            <a class="btn btn-ghost" href="/admin" data-i18n="hero.ctaAdmin">Admin panel</a>
           </div>
           <div class="stats">
             <div class="stat">
               <div class="num" id="stat-count">—</div>
-              <div class="lbl">Faol modellar</div>
+              <div class="lbl" data-i18n="stats.models">Faol modellar</div>
             </div>
             <div class="stat">
               <div class="num">&lt; 2s</div>
-              <div class="lbl">AR ochilish vaqti</div>
+              <div class="lbl" data-i18n="stats.time">AR ochilish vaqti</div>
             </div>
             <div class="stat">
               <div class="num">0</div>
-              <div class="lbl">Ilova o‘rnatish</div>
+              <div class="lbl" data-i18n="stats.install">Ilova o‘rnatish</div>
             </div>
           </div>
         </div>
 
         <div class="hero-model">
           <div class="hero-badge">
-            <span class="d"></span> Live 3D · Aylantirib ko‘ring
+            <span class="d"></span>
+            <span data-i18n="hero.badge">Live 3D · Aylantirib ko‘ring</span>
           </div>
           <model-viewer
             id="hero-mv"
@@ -613,9 +668,9 @@
 
     <section id="how" class="wrap">
       <div class="section-head">
-        <div class="kicker">Qanday ishlaydi</div>
-        <h2>Uch qadamda AR tajribasi</h2>
-        <p>
+        <div class="kicker" data-i18n="how.kicker">Qanday ishlaydi</div>
+        <h2 data-i18n="how.title">Uch qadamda AR tajribasi</h2>
+        <p data-i18n="how.lead">
           Mijoz smartfonini chiqaradi, QR'ni skanlaydi — kerakli mahsulot uning
           xonasida paydo bo‘ladi. Sizdan faqat modelni yuklash talab qilinadi.
         </p>
@@ -623,24 +678,24 @@
       <div class="steps">
         <div class="step">
           <div class="n">1</div>
-          <h3>Modelni yuklang</h3>
-          <p>
+          <h3 data-i18n="steps.one.title">Modelni yuklang</h3>
+          <p data-i18n="steps.one.text">
             Admin panelda .glb yoki .gltf faylni tanlang, nomini kiriting va
             saqlang. Tizim QR kodni avtomatik yaratadi.
           </p>
         </div>
         <div class="step">
           <div class="n">2</div>
-          <h3>QR'ni joylashtiring</h3>
-          <p>
+          <h3 data-i18n="steps.two.title">QR'ni joylashtiring</h3>
+          <p data-i18n="steps.two.text">
             QR'ni menyu, etiketka yoki ko‘rgazma panelida ko‘rsating. Mijoz
             kamerasi bilan bir lahzada skanlaydi.
           </p>
         </div>
         <div class="step">
           <div class="n">3</div>
-          <h3>AR darhol ochiladi</h3>
-          <p>
+          <h3 data-i18n="steps.three.title">AR darhol ochiladi</h3>
+          <p data-i18n="steps.three.text">
             Android'da Scene Viewer, iOS'da Quick Look yordamida model haqiqiy
             o‘lchamda xonada paydo bo‘ladi — hech qanday kutish sahifasi yo‘q.
           </p>
@@ -650,9 +705,9 @@
 
     <section id="features" class="wrap">
       <div class="section-head">
-        <div class="kicker">Imkoniyatlar</div>
-        <h2>Hamma narsa bir platformada</h2>
-        <p>
+        <div class="kicker" data-i18n="features.kicker">Imkoniyatlar</div>
+        <h2 data-i18n="features.title">Hamma narsa bir platformada</h2>
+        <p data-i18n="features.lead">
           Kichik restorandan to yirik ko‘rgazmalargacha — bitta tizim bilan AR
           tajribangizni boshqaring.
         </p>
@@ -660,35 +715,35 @@
       <div class="features">
         <div class="feat">
           <div class="ico">⚡</div>
-          <h4>Zero-install AR</h4>
-          <p>Mijoz ilova yuklab olmaydi. QR → kamera → AR. Darhol.</p>
+          <h4 data-i18n="feature.one.title">Zero-install AR</h4>
+          <p data-i18n="feature.one.text">Mijoz ilova yuklab olmaydi. QR → kamera → AR. Darhol.</p>
         </div>
         <div class="feat">
           <div class="ico">🎨</div>
-          <h4>3D model boshqaruvi</h4>
-          <p>Qo‘shish, tahrirlash va o‘chirish uchun qulay admin panel.</p>
+          <h4 data-i18n="feature.two.title">3D model boshqaruvi</h4>
+          <p data-i18n="feature.two.text">Qo‘shish, tahrirlash va o‘chirish uchun qulay admin panel.</p>
         </div>
         <div class="feat">
           <div class="ico">📲</div>
-          <h4>iOS va Android</h4>
-          <p>Quick Look va Scene Viewer orqali native AR ishga tushadi.</p>
+          <h4 data-i18n="feature.three.title">iOS va Android</h4>
+          <p data-i18n="feature.three.text">Quick Look va Scene Viewer orqali native AR ishga tushadi.</p>
         </div>
         <div class="feat">
           <div class="ico">🔗</div>
-          <h4>QR avtomatik</h4>
-          <p>Har bir modelga yuklash payti QR yaratiladi va saqlanadi.</p>
+          <h4 data-i18n="feature.four.title">QR avtomatik</h4>
+          <p data-i18n="feature.four.text">Har bir modelga yuklash payti QR yaratiladi va saqlanadi.</p>
         </div>
         <div class="feat">
           <div class="ico">🖼️</div>
-          <h4>Bosma uchun tayyor</h4>
-          <p>
+          <h4 data-i18n="feature.five.title">Bosma uchun tayyor</h4>
+          <p data-i18n="feature.five.text">
             QR PNG formatda yuklab olinadi — etiketka va menyuga yopishtiring.
           </p>
         </div>
         <div class="feat">
           <div class="ico">🔒</div>
-          <h4>O‘zingizniki</h4>
-          <p>
+          <h4 data-i18n="feature.six.title">O‘zingizniki</h4>
+          <p data-i18n="feature.six.text">
             Serveringizda ishlaydi. Fayllar va havolalar to‘liq sizning
             nazoratingizda.
           </p>
@@ -698,29 +753,29 @@
 
     <section class="wrap">
       <div class="section-head">
-        <div class="kicker">Foydalanish sohalari</div>
-        <h2>Qayerda ishlatish mumkin?</h2>
+        <div class="kicker" data-i18n="cases.kicker">Foydalanish sohalari</div>
+        <h2 data-i18n="cases.title">Qayerda ishlatish mumkin?</h2>
       </div>
       <div class="cases">
         <div class="case">
           <span class="em">🍕</span>
-          <h5>Restoran</h5>
-          <p>Menyudagi taomlarni 3D'da ko‘rish.</p>
+          <h5 data-i18n="case.one.title">Restoran</h5>
+          <p data-i18n="case.one.text">Menyudagi taomlarni 3D'da ko‘rish.</p>
         </div>
         <div class="case">
           <span class="em">🛋️</span>
-          <h5>Mebel do‘koni</h5>
-          <p>Mijoz jihozni xonasiga "qo‘yib" sinab ko‘radi.</p>
+          <h5 data-i18n="case.two.title">Mebel do‘koni</h5>
+          <p data-i18n="case.two.text">Mijoz jihozni xonasiga "qo‘yib" sinab ko‘radi.</p>
         </div>
         <div class="case">
           <span class="em">🏛️</span>
-          <h5>Muzey</h5>
-          <p>Eksponatlar interaktiv, ta’limiy va qiziqarli.</p>
+          <h5 data-i18n="case.three.title">Muzey</h5>
+          <p data-i18n="case.three.text">Eksponatlar interaktiv, ta’limiy va qiziqarli.</p>
         </div>
         <div class="case">
           <span class="em">🛍️</span>
-          <h5>Marketplace</h5>
-          <p>Mahsulotni sotib olishdan oldin ko‘ring.</p>
+          <h5 data-i18n="case.four.title">Marketplace</h5>
+          <p data-i18n="case.four.text">Mahsulotni sotib olishdan oldin ko‘ring.</p>
         </div>
       </div>
     </section>
@@ -728,25 +783,25 @@
     <section id="demo" class="wrap">
       <div class="demo">
         <div>
-          <div class="kicker">Live demo</div>
-          <h2>QR'ni skanlang va sinab ko‘ring</h2>
-          <p style="color: #cbd5e1; line-height: 1.6">
+          <div class="kicker" data-i18n="demo.kicker">Live demo</div>
+          <h2 data-i18n="demo.title">QR'ni skanlang va sinab ko‘ring</h2>
+          <p style="color: #cbd5e1; line-height: 1.6" data-i18n="demo.lead">
             Telefon kamerasini o‘ng tomondagi QR ga tuting. Model darhol AR
             rejimida xonangizda paydo bo‘ladi — kutish, ilova yoki tasdiqlash
             yo‘q.
           </p>
           <ul class="bullets">
-            <li>Native AR — brauzer ichida emas, tizimning o‘z AR rejimida</li>
-            <li>HTTPS orqali xavfsiz</li>
-            <li>Model fayllari siz yuklagan tarzda</li>
+            <li data-i18n="demo.bulletOne">Native AR — brauzer ichida emas, tizimning o‘z AR rejimida</li>
+            <li data-i18n="demo.bulletTwo">HTTPS orqali xavfsiz</li>
+            <li data-i18n="demo.bulletThree">Model fayllari siz yuklagan tarzda</li>
           </ul>
-          <a class="btn btn-primary" href="#" id="demo-open"
+          <a class="btn btn-primary" href="#" id="demo-open" data-i18n="demo.cta"
             >🚀 Brauzerda ochish</a
           >
         </div>
         <div class="qr-card" id="qr-card">
           <img id="qr-img" src="" alt="QR demo" />
-          <div class="lbl">Aniq AR Demo</div>
+          <div class="lbl" data-i18n="demo.cardLabel">Aniq AR Demo</div>
           <div class="nm" id="qr-name">Model yuklanmoqda…</div>
           <div class="url" id="qr-url"></div>
         </div>
@@ -755,8 +810,8 @@
 
     <section class="wrap">
       <div class="cta">
-        <h2>Startup demo uchun tayyor</h2>
-        <p>
+        <h2 data-i18n="cta.title">Startup demo uchun tayyor</h2>
+        <p data-i18n="cta.text">
           Qo‘shimcha sozlash talab qilmaydi. Admin panelga kiring, modellarni
           yuklang va QR'ni taqdimotda ishlating.
         </p>
@@ -764,16 +819,294 @@
           class="btn btn-primary"
           href="/admin"
           style="padding: 14px 22px; font-size: 15px"
+          data-i18n="cta.button"
           >Admin panelni ochish →</a
         >
       </div>
     </section>
 
     <footer>
-      <div class="wrap">© 2026 Aniq AR · Skanlang. Ko‘ring. Joylashtiring.</div>
+      <div class="wrap" data-i18n="footer.text">© 2026 Aniq AR · Skanlang. Ko‘ring. Joylashtiring.</div>
     </footer>
 
     <script>
+      const translations = {
+        uz: {
+          lang: "uz",
+          title: "Aniq AR — Skanlang. Ko‘ring. Joylashtiring.",
+          description:
+            "QR kodni skanlang — mahsulot AR orqali haqiqiy dunyoda joylashadi. Restoran, do‘kon va muzeylar uchun yangi tajriba.",
+          "nav.how": "Qanday ishlaydi",
+          "nav.features": "Imkoniyatlar",
+          "nav.demo": "Demo",
+          "nav.admin": "Admin",
+          "hero.eyebrow": "Startup Pitch Demo · 2026",
+          "hero.title": "Skanlang. Ko‘ring. <span class=\"grad\">Joylashtiring.</span>",
+          "hero.lead":
+            "QR kodni kameraga tuting — mahsulot darhol haqiqiy dunyoda paydo bo‘ladi. Yuklab olish, ilova o‘rnatish yoki kutish shart emas. Aniq AR — restoran, do‘kon va muzeylarni mijoz bilan yangi darajada bog‘laydi.",
+          "hero.ctaDemo": "🎯 Demoni ko‘rish",
+          "hero.ctaAdmin": "Admin panel",
+          "hero.badge": "Live 3D · Aylantirib ko‘ring",
+          "stats.models": "Faol modellar",
+          "stats.time": "AR ochilish vaqti",
+          "stats.install": "Ilova o‘rnatish",
+          "how.kicker": "Qanday ishlaydi",
+          "how.title": "Uch qadamda AR tajribasi",
+          "how.lead":
+            "Mijoz smartfonini chiqaradi, QR'ni skanlaydi — kerakli mahsulot uning xonasida paydo bo‘ladi. Sizdan faqat modelni yuklash talab qilinadi.",
+          "steps.one.title": "Modelni yuklang",
+          "steps.one.text":
+            "Admin panelda .glb yoki .gltf faylni tanlang, nomini kiriting va saqlang. Tizim QR kodni avtomatik yaratadi.",
+          "steps.two.title": "QR'ni joylashtiring",
+          "steps.two.text":
+            "QR'ni menyu, etiketka yoki ko‘rgazma panelida ko‘rsating. Mijoz kamerasi bilan bir lahzada skanlaydi.",
+          "steps.three.title": "AR darhol ochiladi",
+          "steps.three.text":
+            "Android'da Scene Viewer, iOS'da Quick Look yordamida model haqiqiy o‘lchamda xonada paydo bo‘ladi — hech qanday kutish sahifasi yo‘q.",
+          "features.kicker": "Imkoniyatlar",
+          "features.title": "Hamma narsa bir platformada",
+          "features.lead":
+            "Kichik restorandan to yirik ko‘rgazmalargacha — bitta tizim bilan AR tajribangizni boshqaring.",
+          "feature.one.title": "Zero-install AR",
+          "feature.one.text": "Mijoz ilova yuklab olmaydi. QR → kamera → AR. Darhol.",
+          "feature.two.title": "3D model boshqaruvi",
+          "feature.two.text": "Qo‘shish, tahrirlash va o‘chirish uchun qulay admin panel.",
+          "feature.three.title": "iOS va Android",
+          "feature.three.text": "Quick Look va Scene Viewer orqali native AR ishga tushadi.",
+          "feature.four.title": "QR avtomatik",
+          "feature.four.text": "Har bir modelga yuklash payti QR yaratiladi va saqlanadi.",
+          "feature.five.title": "Bosma uchun tayyor",
+          "feature.five.text": "QR PNG formatda yuklab olinadi — etiketka va menyuga yopishtiring.",
+          "feature.six.title": "O‘zingizniki",
+          "feature.six.text": "Serveringizda ishlaydi. Fayllar va havolalar to‘liq sizning nazoratingizda.",
+          "cases.kicker": "Foydalanish sohalari",
+          "cases.title": "Qayerda ishlatish mumkin?",
+          "case.one.title": "Restoran",
+          "case.one.text": "Menyudagi taomlarni 3D'da ko‘rish.",
+          "case.two.title": "Mebel do‘koni",
+          "case.two.text": "Mijoz jihozni xonasiga \"qo‘yib\" sinab ko‘radi.",
+          "case.three.title": "Muzey",
+          "case.three.text": "Eksponatlar interaktiv, ta’limiy va qiziqarli.",
+          "case.four.title": "Marketplace",
+          "case.four.text": "Mahsulotni sotib olishdan oldin ko‘ring.",
+          "demo.kicker": "Live demo",
+          "demo.title": "QR'ni skanlang va sinab ko‘ring",
+          "demo.lead":
+            "Telefon kamerasini o‘ng tomondagi QR ga tuting. Model darhol AR rejimida xonangizda paydo bo‘ladi — kutish, ilova yoki tasdiqlash yo‘q.",
+          "demo.bulletOne": "Native AR — brauzer ichida emas, tizimning o‘z AR rejimida",
+          "demo.bulletTwo": "HTTPS orqali xavfsiz",
+          "demo.bulletThree": "Model fayllari siz yuklagan tarzda",
+          "demo.cta": "🚀 Brauzerda ochish",
+          "demo.cardLabel": "Aniq AR Demo",
+          "cta.title": "Startup demo uchun tayyor",
+          "cta.text":
+            "Qo‘shimcha sozlash talab qilmaydi. Admin panelga kiring, modellarni yuklang va QR'ni taqdimotda ishlating.",
+          "cta.button": "Admin panelni ochish →",
+          "footer.text": "© 2026 Aniq AR · Skanlang. Ko‘ring. Joylashtiring.",
+          "status.loading": "Model yuklanmoqda…",
+          "status.empty": "Model hali yuklanmagan",
+          "status.adminLink": "Admin panelga o‘tish →",
+          "status.error": "Server bilan bog‘lanishda xato"
+        },
+        ru: {
+          lang: "ru",
+          title: "Aniq AR — Сканируйте. Смотрите. Размещайте.",
+          description:
+            "Сканируйте QR-код — и объект появится в реальном мире через AR. Новый опыт для ресторанов, магазинов и музеев.",
+          "nav.how": "Как это работает",
+          "nav.features": "Возможности",
+          "nav.demo": "Демо",
+          "nav.admin": "Админ",
+          "hero.eyebrow": "Startup Pitch Demo · 2026",
+          "hero.title": "Сканируйте. Смотрите. <span class=\"grad\">Размещайте.</span>",
+          "hero.lead":
+            "Наведите камеру на QR-код — и объект сразу появится в реальном мире. Без скачивания, установки приложения и ожидания. Aniq AR по-новому связывает рестораны, магазины и музеи с клиентом.",
+          "hero.ctaDemo": "🎯 Смотреть демо",
+          "hero.ctaAdmin": "Админ-панель",
+          "hero.badge": "Live 3D · Поверните модель",
+          "stats.models": "Активные модели",
+          "stats.time": "Время запуска AR",
+          "stats.install": "Установок приложения",
+          "how.kicker": "Как это работает",
+          "how.title": "AR-опыт в три шага",
+          "how.lead":
+            "Клиент достает смартфон, сканирует QR — и нужный объект появляется у него в комнате. От вас требуется только загрузить модель.",
+          "steps.one.title": "Загрузите модель",
+          "steps.one.text":
+            "В админ-панели выберите файл .glb или .gltf, введите название и сохраните. Система автоматически создаст QR-код.",
+          "steps.two.title": "Разместите QR",
+          "steps.two.text":
+            "Покажите QR в меню, на этикетке или выставочном стенде. Клиент сканирует его камерой за секунду.",
+          "steps.three.title": "AR открывается сразу",
+          "steps.three.text":
+            "На Android используется Scene Viewer, на iOS — Quick Look, поэтому модель появляется в комнате в реальном масштабе без страницы ожидания.",
+          "features.kicker": "Возможности",
+          "features.title": "Все в одной платформе",
+          "features.lead":
+            "От маленького ресторана до крупной выставки — управляйте AR-опытом в одной системе.",
+          "feature.one.title": "AR без установки",
+          "feature.one.text": "Клиент не скачивает приложение. QR → камера → AR. Мгновенно.",
+          "feature.two.title": "Управление 3D-моделями",
+          "feature.two.text": "Удобная админ-панель для добавления, редактирования и удаления.",
+          "feature.three.title": "iOS и Android",
+          "feature.three.text": "Нативный AR запускается через Quick Look и Scene Viewer.",
+          "feature.four.title": "QR автоматически",
+          "feature.four.text": "Для каждой модели QR создается и сохраняется при загрузке.",
+          "feature.five.title": "Готово к печати",
+          "feature.five.text": "QR можно скачать в PNG и разместить на этикетке или в меню.",
+          "feature.six.title": "Полный контроль",
+          "feature.six.text": "Работает на вашем сервере. Файлы и ссылки полностью под вашим контролем.",
+          "cases.kicker": "Сферы применения",
+          "cases.title": "Где это можно использовать?",
+          "case.one.title": "Ресторан",
+          "case.one.text": "Показывайте блюда из меню в 3D.",
+          "case.two.title": "Мебельный магазин",
+          "case.two.text": "Клиент может \"поставить\" товар в свою комнату и примерить.",
+          "case.three.title": "Музей",
+          "case.three.text": "Экспонаты становятся интерактивными, образовательными и интересными.",
+          "case.four.title": "Маркетплейс",
+          "case.four.text": "Посмотрите товар до покупки.",
+          "demo.kicker": "Live demo",
+          "demo.title": "Сканируйте QR и попробуйте",
+          "demo.lead":
+            "Наведите камеру телефона на QR справа. Модель сразу откроется в AR в вашей комнате — без ожидания, приложений и подтверждений.",
+          "demo.bulletOne": "Нативный AR — не в браузере, а в системном AR-режиме",
+          "demo.bulletTwo": "Безопасно через HTTPS",
+          "demo.bulletThree": "Файлы моделей отображаются в загруженном вами виде",
+          "demo.cta": "🚀 Открыть в браузере",
+          "demo.cardLabel": "Aniq AR Demo",
+          "cta.title": "Готово для startup demo",
+          "cta.text":
+            "Дополнительная настройка не нужна. Зайдите в админ-панель, загрузите модели и используйте QR в презентации.",
+          "cta.button": "Открыть админ-панель →",
+          "footer.text": "© 2026 Aniq AR · Сканируйте. Смотрите. Размещайте.",
+          "status.loading": "Модель загружается…",
+          "status.empty": "Модель еще не загружена",
+          "status.adminLink": "Перейти в админ-панель →",
+          "status.error": "Ошибка соединения с сервером"
+        },
+        en: {
+          lang: "en",
+          title: "Aniq AR — Scan. See. Place.",
+          description:
+            "Scan a QR code and place products into the real world with AR. A new experience for restaurants, stores, and museums.",
+          "nav.how": "How it works",
+          "nav.features": "Features",
+          "nav.demo": "Demo",
+          "nav.admin": "Admin",
+          "hero.eyebrow": "Startup Pitch Demo · 2026",
+          "hero.title": "Scan. See. <span class=\"grad\">Place.</span>",
+          "hero.lead":
+            "Point your camera at a QR code and the product appears instantly in the real world. No downloads, no app installs, no waiting. Aniq AR connects restaurants, stores, and museums with customers in a new way.",
+          "hero.ctaDemo": "🎯 View demo",
+          "hero.ctaAdmin": "Admin panel",
+          "hero.badge": "Live 3D · Rotate and explore",
+          "stats.models": "Active models",
+          "stats.time": "AR launch time",
+          "stats.install": "App installs",
+          "how.kicker": "How it works",
+          "how.title": "An AR experience in three steps",
+          "how.lead":
+            "The customer picks up a smartphone, scans the QR code, and the product appears in their room. You only need to upload the model.",
+          "steps.one.title": "Upload the model",
+          "steps.one.text":
+            "Choose a .glb or .gltf file in the admin panel, enter a name, and save it. The system generates the QR code automatically.",
+          "steps.two.title": "Place the QR",
+          "steps.two.text":
+            "Show the QR code on a menu, label, or exhibition panel. Customers can scan it instantly with their camera.",
+          "steps.three.title": "AR opens immediately",
+          "steps.three.text":
+            "On Android it uses Scene Viewer, and on iOS it uses Quick Look, so the model appears in the room at real scale with no waiting page.",
+          "features.kicker": "Features",
+          "features.title": "Everything in one platform",
+          "features.lead":
+            "From a small restaurant to a large exhibition, manage your AR experience from a single system.",
+          "feature.one.title": "Zero-install AR",
+          "feature.one.text": "Customers do not install an app. QR → camera → AR. Instantly.",
+          "feature.two.title": "3D model management",
+          "feature.two.text": "A simple admin panel for adding, editing, and deleting models.",
+          "feature.three.title": "iOS and Android",
+          "feature.three.text": "Native AR launches through Quick Look and Scene Viewer.",
+          "feature.four.title": "Automatic QR",
+          "feature.four.text": "A QR code is generated and saved automatically for each uploaded model.",
+          "feature.five.title": "Ready for print",
+          "feature.five.text": "Download the QR as PNG and place it on labels or menus.",
+          "feature.six.title": "Yours to control",
+          "feature.six.text": "Runs on your server. Files and links stay fully under your control.",
+          "cases.kicker": "Use cases",
+          "cases.title": "Where can you use it?",
+          "case.one.title": "Restaurant",
+          "case.one.text": "Show menu items in 3D.",
+          "case.two.title": "Furniture store",
+          "case.two.text": "Customers can place the item in their room before buying.",
+          "case.three.title": "Museum",
+          "case.three.text": "Make exhibits interactive, educational, and engaging.",
+          "case.four.title": "Marketplace",
+          "case.four.text": "Preview the product before purchase.",
+          "demo.kicker": "Live demo",
+          "demo.title": "Scan the QR and try it",
+          "demo.lead":
+            "Point your phone camera at the QR code on the right. The model opens in AR in your room right away, with no waiting, app, or confirmation steps.",
+          "demo.bulletOne": "Native AR — not inside the browser, but in the system AR mode",
+          "demo.bulletTwo": "Secure over HTTPS",
+          "demo.bulletThree": "Model files appear exactly as you uploaded them",
+          "demo.cta": "🚀 Open in browser",
+          "demo.cardLabel": "Aniq AR Demo",
+          "cta.title": "Ready for your startup demo",
+          "cta.text":
+            "No extra setup required. Open the admin panel, upload models, and use the QR code in your presentation.",
+          "cta.button": "Open admin panel →",
+          "footer.text": "© 2026 Aniq AR · Scan. See. Place.",
+          "status.loading": "Loading model…",
+          "status.empty": "No model uploaded yet",
+          "status.adminLink": "Go to admin panel →",
+          "status.error": "Server connection error"
+        }
+      };
+
+      function t(key) {
+        const lang = localStorage.getItem("landing-lang") || "uz";
+        return translations[lang]?.[key] || translations.uz[key] || "";
+      }
+
+      function applyLanguage(lang) {
+        const dict = translations[lang] || translations.uz;
+        document.documentElement.lang = dict.lang;
+        document.title = dict.title;
+        document
+          .querySelector('meta[name="description"]')
+          .setAttribute("content", dict.description);
+
+        document.querySelectorAll("[data-i18n]").forEach((node) => {
+          const key = node.dataset.i18n;
+          if (dict[key]) node.textContent = dict[key];
+        });
+
+        document.querySelectorAll("[data-i18n-html]").forEach((node) => {
+          const key = node.dataset.i18nHtml;
+          if (dict[key]) node.innerHTML = dict[key];
+        });
+
+        document.querySelectorAll(".lang-btn").forEach((button) => {
+          const active = button.dataset.lang === lang;
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-pressed", active ? "true" : "false");
+        });
+
+        if (!document.getElementById("qr-name").dataset.productLoaded) {
+          document.getElementById("qr-name").textContent = dict["status.loading"];
+        }
+      }
+
+      function setLanguage(lang) {
+        localStorage.setItem("landing-lang", lang);
+        applyLanguage(lang);
+      }
+
+      document.querySelectorAll(".lang-btn").forEach((button) => {
+        button.addEventListener("click", () => setLanguage(button.dataset.lang));
+      });
+
       async function init() {
         try {
           const res = await fetch("/api/products");
@@ -782,9 +1115,9 @@
 
           if (!items.length) {
             document.getElementById("qr-name").textContent =
-              "Model hali yuklanmagan";
+              t("status.empty");
             document.getElementById("qr-url").innerHTML =
-              '<a style="color:#6366f1" href="/admin">Admin panelga o‘tish →</a>';
+              `<a style="color:#6366f1" href="/admin">${t("status.adminLink")}</a>`;
             return;
           }
 
@@ -795,13 +1128,15 @@
 
           document.getElementById("qr-img").src = demo.qr_url;
           document.getElementById("qr-name").textContent = demo.name;
+          document.getElementById("qr-name").dataset.productLoaded = "true";
           document.getElementById("qr-url").textContent = demo.ar_url;
           document.getElementById("demo-open").href = demo.ar_url;
         } catch (e) {
           document.getElementById("qr-name").textContent =
-            "Server bilan bog‘lanishda xato";
+            t("status.error");
         }
       }
+      applyLanguage(localStorage.getItem("landing-lang") || "uz");
       init();
     </script>
   </body>
